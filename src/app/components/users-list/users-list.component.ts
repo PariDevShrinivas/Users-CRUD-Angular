@@ -9,6 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserPopupComponent } from '../add-user-popup/add-user-popup.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Iusers {
   name: string;
@@ -91,12 +92,14 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: any = MatPaginator;
   @ViewChild(MatSort) sort: any = MatSort;
 
-  constructor(private userService: UsersService, public dialog: MatDialog) {
+  constructor(private userService: UsersService, public dialog: MatDialog, private _snackBar: MatSnackBar) {
     // this.displayedColumns.push('select'); // to show check box column as first
     this.displayedColumns = this.columns.map((item: Icolumns) => item.header);
   }
 
-
+  showMessage(message: string) {
+    this._snackBar.open(message, 'close');
+  }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -135,6 +138,7 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
       let usersValue: any = this.dataSource.data;
       localStorage.setItem('Users', JSON.stringify(usersValue));
       this.selection.clear();
+      this.showMessage('User Added successfully.')
     });
   }
 
@@ -171,6 +175,7 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selection.deselect(...this.selection.selected.filter((item) => item.id === userId))
     }
     this.isAllSelected();
+    this.showMessage('User deleted successfully.')
   }
 
   isUserPresentInSelection(user: Iusers) {
