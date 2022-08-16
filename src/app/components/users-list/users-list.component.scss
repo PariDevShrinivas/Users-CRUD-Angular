@@ -27,9 +27,11 @@
       tr.element-row:not(.expanded-row):active {
         background: #efefef;
       }
+
       tr.element-row:hover {
         cursor: pointer;
       }
+
       tr.element-row.expanded-row + tr.detail-row {
         td {
           padding-right: 0;
