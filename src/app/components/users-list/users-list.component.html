@@ -84,7 +84,7 @@
             <button
               mat-icon-button
               aria-label="delete icon"
-              [disabled]="row.id !== currentSelectedUser?.id"
+              [disabled]="!isUserPresentInSelection(row)"
             >
               <mat-icon (click)="onDelete(row.id)">delete</mat-icon>
             </button>

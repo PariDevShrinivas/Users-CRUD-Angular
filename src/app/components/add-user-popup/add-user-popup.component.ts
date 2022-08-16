@@ -50,7 +50,7 @@ export class AddUserPopupComponent implements OnInit {
       return
     }
     console.log(" Billing Form", this.userForm.value);
-    this.user.id = this.data.users.length + 1;
+    this.user.id = Math.random() + 1;
     this.user = { ...this.user, ...this.userForm.value };
     this.data.users.unshift(this.user);
     this.dialogRef.close(this.data.users);

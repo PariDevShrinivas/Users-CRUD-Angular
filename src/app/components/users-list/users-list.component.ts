@@ -132,6 +132,9 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       this.dataSource.data = result;
+      let usersValue: any = this.dataSource.data;
+      localStorage.setItem('Users', JSON.stringify(usersValue));
+      this.selection.clear();
     });
   }
 
@@ -142,6 +145,9 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource = new MatTableDataSource<Iusers>(this.usersData);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        let usersValue: any = this.usersData;
+
+        localStorage.setItem('Users', JSON.stringify(usersValue));
       }
     }, error => {
       console.error(error);
@@ -156,21 +162,38 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDelete(userId: number) {
-    // this.userService.deleteUser(userId).subscribe((response) => {})
-    this.dataSource.data = this.dataSource.data.filter((user) => userId !== user.id);
+    let usersValue: any = this.dataSource.data = this.dataSource.data.filter((user) => userId !== user.id);
+    localStorage.setItem('Users', JSON.stringify(usersValue));
+    const foundData = this.selection.selected.find((item) => item.id === userId);
+    if (foundData && this.selection.selected.length === 1) {
+      this.selection.clear();
+    } else {
+      this.selection.deselect(...this.selection.selected.filter((item) => item.id === userId))
+    }
+    this.isAllSelected();
   }
 
-  onAddUser(userData: Iusers) {
-    userData = { ...userData, id: this.dataSource.data.length + 1 };
-    this.dataSource.data.push(userData);
+  isUserPresentInSelection(user: Iusers) {
+    const foundData = this.selection.selected.find((item) => item.id === user.id);
+    return foundData ? true : false;
   }
 
   ngOnInit(): void {
-    this.getUsers();
+    if (localStorage.getItem("Users") === null) {
+      this.getUsers();
+    }
   }
 
   ngAfterViewInit(): void {
+    console.log(localStorage.getItem("Users"), '===>>>>>Dataaaa');
 
+    if (localStorage.getItem("Users")) {
+      let localData: any = localStorage.getItem('Users');
+      let usersData: any = JSON.parse(localData);
+      this.dataSource = new MatTableDataSource<Iusers>(usersData);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   ngOnDestroy(): void {
