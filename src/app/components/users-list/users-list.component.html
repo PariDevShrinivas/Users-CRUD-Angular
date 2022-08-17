@@ -150,10 +150,7 @@
         *matRowDef="let element; columns: displayedColumns"
         class="element-row"
         [class.expanded-row]="expandedElement === element"
-        (click)="
-          currentSelectedUser = element;
-          expandedElement = expandedElement === element ? null : element
-        "
+        (click)="onClickRow(element)"
       ></tr>
       <tr
         mat-row

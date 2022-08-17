@@ -93,13 +93,17 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort: any = MatSort;
 
   constructor(private userService: UsersService, public dialog: MatDialog, private _snackBar: MatSnackBar) {
-    // this.displayedColumns.push('select'); // to show check box column as first
     this.displayedColumns = this.columns.map((item: Icolumns) => item.header);
   }
 
   onClearSearch() {
     this.search = '';
     this.dataSource.filter = this.search;
+  }
+
+  onClickRow(element: Iusers) {
+    this.currentSelectedUser = element;
+    this.expandedElement = this.expandedElement === element ? null : element;
   }
 
   showMessage(message: string) {
