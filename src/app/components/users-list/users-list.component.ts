@@ -97,6 +97,11 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.displayedColumns = this.columns.map((item: Icolumns) => item.header);
   }
 
+  onClearSearch() {
+    this.search = '';
+    this.dataSource.filter = this.search;
+  }
+
   showMessage(message: string) {
     this._snackBar.open(message, 'close');
   }
